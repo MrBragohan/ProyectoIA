@@ -43,7 +43,6 @@ Aplicaciones de IA, Multimodalidad, Despliegue de Aplicaciones de IA, y Ética y
    ```bash
    python -m venv venv
    .\venv\Scripts\Activate   # Windows
-   source venv/bin/activate  # Mac/Linux
    ```
 2. Instalar dependencias:
    ```bash
@@ -75,9 +74,3 @@ con un modelo generativo...
 ## Fuente
 Tema: RAG - Retrieval-Augmented Generation
 ```
-
-## Próximos pasos (Avance 2)
-- Reemplazar la recuperación por palabras clave con embeddings y similitud semántica.
-- Incorporar múltiples documentos (PDF) como fuente de conocimiento.
-- Añadir capacidades de agente (por ejemplo, generar quizzes automáticamente sobre el
-  tema consultado, usando Function Calling).dsadsa
