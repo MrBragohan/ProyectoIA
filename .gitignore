@@ -1,18 +1,12 @@
-# Variables de entorno
-.env
-.env.*
-
-# Entornos virtuales de Python
+# Entorno y secretos
 venv/
 .venv/
-env/
+.env
+.streamlit/secrets.toml
 
-# Caché de Python
+# Python
 __pycache__/
-*.py[cod]
+*.pyc
 
-# Archivos de configuración de VS Code
-.vscode/
-
-# Archivos generados
-*.log
+# Índices vectoriales (se regeneran desde docs/)
+chroma_db/
