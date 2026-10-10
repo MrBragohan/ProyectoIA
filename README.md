@@ -5,7 +5,7 @@ Asistente conversacional que responde preguntas sobre el material de la asignatu
 Generation). Responde únicamente con la información del corpus, cita el documento y fragmento
 que respalda cada respuesta y reconoce cuándo la información no está disponible.
 
-**App desplegada:** `https://TU-APP.streamlit.app` *(completar tras el despliegue)*
+**App desplegada:** `https://proyectoia-b8nfsdkv4w6anf6cv22fed.streamlit.app/`
 
 ## Privacidad y control de los datos
 
