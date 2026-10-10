@@ -55,7 +55,19 @@ despliegue y ética).
 **Pertinencia:** es el material que un estudiante de la asignatura consultaría; es acotado,
 verificable (permite construir un ground truth fiable) y coherente con el dominio del asistente
 (Tutor Académico).
-*(Si añades PDFs/guías de clase a `docs/`, lístalos aquí con una frase de justificación.)*
+Además de los apuntes, `docs/` incluye tres guías en PDF del módulo *56BA1A Desarrollo de
+aplicaciones con IA*, que conservan el número de página para citar "archivo, Pág. n":
+- `5_Shot_Prompting.pdf` (3 págs.): Zero/One/Few-Shot, con ejemplo de tickets de soporte y
+  consideraciones de costo, consistencia y variedad. Respalda el Few-Shot del asistente.
+- `Introducción_Ingeniería_Prompt.pdf` (6 págs.): anatomía de un prompt (tarea, formato, tema,
+  tono, contexto, restricciones) y prompts condicionales. Sustenta el System Prompt.
+- `6_System_configuration_Chat_Roles.pdf` (6 págs.): System Instructions, roles `user`/`model`
+  y chats multi turno con `google-genai`. Respalda la separación instrucción de sistema / historial.
+
+**Nota:** `knowledge_base.txt` y la guía de Introducción describen los "pilares/componentes" de un
+prompt de forma distinta (Tarea, Contexto, Persona, Formato, Tono, Ejemplos *vs.* Tarea, Formato,
+Tema, Tono, Contexto, Restricciones). Al preguntar por ellos, el asistente puede citar cualquiera de
+las dos fuentes.
 
 ### 2. Ingesta
 `PyPDFLoader` (PDF, conserva nº de página), `TextLoader` (TXT), `Docx2txtLoader` (DOCX) y
@@ -131,6 +143,43 @@ python evaluate_ragas.py --comparar baseline mejora
 ### Análisis *(completar)*
 - Métrica más baja y componente atribuido (chunking / recuperación / generación).
 - Cambio realizado en la iteración de mejora, por qué se eligió y su efecto en las métricas.
+
+## Preguntas guía para probar el asistente
+
+Verificación manual rápida en la app (sin Ragas). Usa **🗑️ Nueva conversación** entre pregunta y
+pregunta para que el historial no influya. Requiere que los 3 PDFs estén en `docs/` y que el índice
+esté construido (`python ingest.py --reconstruir` en local; en Streamlit Cloud se construye solo
+en el primer arranque).
+
+### A. Preguntas dentro del corpus (no deben rechazarse)
+
+| # | Pregunta | Respuesta esperada | Fuente esperada | ¿Rechazó por error? | ¿Fuente correcta? |
+|---|---|---|---|---|---|
+| 1 | ¿Qué diferencia hay entre Zero-Shot, One-Shot y Few-Shot Prompting? | Zero-Shot no da ejemplos; One-Shot da uno para fijar formato o tono; Few-Shot da entre 3 y 5. | `5_Shot_Prompting.pdf`, págs. 1-2 | | |
+| 2 | ¿Por qué conviene usar Few-Shot Prompting? | Establece patrones complejos, reduce errores y define el estilo de respuesta. | `5_Shot_Prompting.pdf`, pág. 2 | | |
+| 3 | ¿Cuáles son los componentes de un prompt correcto? | Tarea, formato, tema, tono, contexto y requerimientos o restricciones. | `Introducción_Ingeniería_Prompt.pdf`, págs. 1-4 | | |
+| 4 | ¿Qué es un prompt condicional y para qué sirve? | Incluye lógica de decisión tipo if-else y permite manejar varios escenarios en un solo prompt. | `Introducción_Ingeniería_Prompt.pdf`, pág. 5 | | |
+| 5 | ¿Qué roles existen en la conversación con la API de Gemini y en qué se diferencian de otras APIs? | Roles `user` y `model`; otras plataformas usan `assistant`. | `6_System_configuration_Chat_Roles.pdf`, pág. 2 | | |
+| 6 | ¿Para qué sirven las System Instructions? | Definir perfil o persona, restricciones de formato, tono y estilo, y guardrails de ámbito. | `6_System_configuration_Chat_Roles.pdf`, págs. 1-2 | | |
+
+**Falso rechazo** = cuántas de las 6 recibieron la frase *"No tengo información suficiente..."*: ___ de 6.
+
+### B. Preguntas fuera del corpus (deben rechazarse)
+
+| # | Pregunta | Comportamiento esperado | ¿Rechazó? |
+|---|---|---|---|
+| 7 | ¿Cuál es la capital de Francia? | Frase fija de rechazo, sin fuentes | |
+| 8 | ¿Cómo se implementa una lista enlazada en C++? | Frase fija de rechazo, sin fuentes | |
+| 9 | ¿Cuánto cuesta la API de Gemini por millón de tokens? | Frase fija de rechazo, sin inventar cifras (los PDFs mencionan Gemini, pero no precios) | |
+| 10 | ¿Quién ganó el Mundial de fútbol de 2022? | Frase fija de rechazo, sin fuentes | |
+
+**Rechazo correcto** = cuántas de las 4 recibieron la frase de rechazo: ___ de 4.
+
+### C. Pregunta de seguimiento (opcional)
+
+Pregunta primero *¿Qué es Few-Shot Prompting?* y, sin pulsar "Nueva conversación", escribe
+*¿y por qué conviene usarlo?*. La app debe mostrar «🔎 Búsqueda realizada con: …» con la pregunta
+reformulada de forma autónoma y responder con los fragmentos de `5_Shot_Prompting.pdf`.
 
 ## Ejecución local
 
